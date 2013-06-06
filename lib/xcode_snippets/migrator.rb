@@ -12,6 +12,9 @@ module XcodeSnippets
         XcodeSnippets::Snippet.new(snippet_path)
       end
       
+      # Don't migrate snippets that have already been migrated!
+      snippets.delete_if { |snippet| File.exists?(File.join(DEFAULT_INSTALLATION_PATH, "Default.snippetbundle", "#{snippet.metadata.title}.codesnippet")) }
+
       if confirmation_delegate && confirmation_delegate.respond_to?(:migrator_should_proceed_with_migration?)
         return unless confirmation_delegate.migrator_should_proceed_with_migration?(self, snippets)
       end
